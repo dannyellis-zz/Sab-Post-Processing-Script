@@ -4,6 +4,7 @@ import sys
 import os
 import shutil
 import glob
+import stat
 
 def main(argv):
     # Sab throws back 7 arguments, if there aren't 7 something went wrong so quit
@@ -35,8 +36,10 @@ def main(argv):
     for basename in os.listdir(dest_folder):
         if basename.endswith('.nfo') or basename.endswith('.sfv') or basename.endswith('.srr'):
             os.remove(os.path.join(dest_folder, basename))
+        elif os.name == "nt":
+            os.chmod(os.path.join(dest_folder, basename), stat.S_IWRITE)
         else:
-            os.chmod(os.path.join(dest_folder, basename), 0755)
+            os.chmod(os.path.join(dest_folder,basename), 0755)
     
     # Lastly remove all the original files as we don't want it in two places
     # If you do want to keep originals, comment out this line
